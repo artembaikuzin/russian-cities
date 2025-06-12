@@ -11,10 +11,11 @@ import (
 )
 
 type City struct {
-	Name   string
-	Region string
-	Lat    float64
-	Lon    float64
+	Name       string
+	Region     string
+	Population int
+	Lat        float64
+	Lon        float64
 }
 
 func main() {
@@ -86,10 +87,18 @@ func main() {
 				} else {
 					city.Region = h.Text
 				}
+			case 5:
+				population, err := strconv.Atoi(h.Attr("data-sort-value"))
 
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "Can't parse population for %q, %v\n", city.Name, err)
+					return
+				}
+
+				city.Population = population
 				cities += 1
 
-				fmt.Printf("%s,%s,%f,%f\n", city.Name, city.Region, city.Lat, city.Lon)
+				fmt.Printf("%s,%s,%d,%f,%f\n", city.Name, city.Region, city.Population, city.Lat, city.Lon)
 			}
 		})
 	})
