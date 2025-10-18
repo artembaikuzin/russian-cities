@@ -1,6 +1,6 @@
 module github.com/artembaikuzin/russian-cities
 
-go 1.25.1
+go 1.25.3
 
 require github.com/gocolly/colly/v2 v2.2.0
 
