@@ -30,7 +30,6 @@ func main() {
 		fmt.Fprintln(os.Stderr, "Took", time.Since(start))
 	}()
 
-	baseUrl := "https://ru.wikipedia.org"
 	url := "https://ru.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA_%D0%B3%D0%BE%D1%80%D0%BE%D0%B4%D0%BE%D0%B2_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8"
 	cities := 0
 
@@ -79,7 +78,12 @@ func main() {
 						city.Lon = lon
 					})
 
-					d.Visit(baseUrl + cityPage)
+					err := d.Visit(cityPage)
+
+					if err != nil {
+						fmt.Fprintf(os.Stderr, "City page visit failed for %q, %v\n", city.Name, err)
+						return
+					}
 				})
 			case 3:
 				if *fixRegions {
@@ -103,7 +107,12 @@ func main() {
 		})
 	})
 
-	c.Visit(url)
+	err := c.Visit(url)
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Cities page visit failed %v\n", err)
+		return
+	}
 
 	fmt.Fprintln(os.Stderr, "Total cities", cities)
 }
